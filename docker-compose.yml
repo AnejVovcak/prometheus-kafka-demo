@@ -13,10 +13,16 @@ services:
     image: confluentinc/cp-kafka:latest
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_INTERNAL:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT_INTERNAL://kafka:29092,PLAINTEXT_EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_INTERNAL://kafka:29092,PLAINTEXT_EXTERNAL://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+
     depends_on:
       - zookeeper
+    ports:
+      - 9092:9092
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -26,7 +32,7 @@ services:
   prometheus-kafka-adapter:
     image: telefonica/prometheus-kafka-adapter:1.9.0
     environment:
-      KAFKA_BROKER_LIST: kafka:9092
+      KAFKA_BROKER_LIST: kafka:29092
       KAFKA_TOPIC: prometheus_raw_data
       PORT: 8081
     depends_on:
@@ -36,10 +42,10 @@ services:
     image: provectuslabs/kafka-ui:latest
     environment:
       KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     ports:
-      - 8080:8080
+      - 8081:8080
     depends_on:
       - kafka
       - zookeeper
