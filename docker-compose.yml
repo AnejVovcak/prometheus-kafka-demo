@@ -49,3 +49,13 @@ services:
     depends_on:
       - kafka
       - zookeeper
+  
+  aggregation-demo:
+    image: aggregation-demo:latest
+    environment:
+      - KUMULUZEE_STREAMING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=kafka:29092
+      - KUMULUZEE_STREAMING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:29092
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka
