@@ -33,13 +33,14 @@ To start the project, ensure you have Docker and Docker Compose installed, then 
 ```bash
 # first build te aggregaton-demo image
 cd aggregation-demo
+mvn clean package
 docker build -t aggregation-demo .
 cd ..
 ```
 
 ```bash
 # run docker-compose (make sure your 8080 and 8081 ports are free)
-docker-compose up
+docker-compose up -d
 ```
 
 This will pull the necessary images and start the services.
