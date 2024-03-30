@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: quarkus-app-3
-          image: anejvovcakjob/aces:latest
+          image: anejvovcakjob/aces:microservice-demo
           ports:
             - containerPort: 8080
           env:
