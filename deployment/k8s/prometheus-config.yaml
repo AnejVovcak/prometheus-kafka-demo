@@ -13,6 +13,9 @@ data:
         static_configs:
           - targets: ['localhost:9090']
       - job_name: 'quarkus-metrics'
-        metrics_path: '/q/metrics/prometheus'  # Added leading slash
+        metrics_path: '/q/metrics/prometheus'
         static_configs:
-          - targets: ['quarkus-app-1:8082', 'quarkus-app-2:8083', 'quarkus-app-3:8084']  # Changed service names to match Kubernetes DNS
+          - targets: ['quarkus-app-1:8082', 'quarkus-app-2:8083', 'quarkus-app-3:8084']
+    
+    remote_write:
+      - url: "http://prometheus-kafka-adapter:8081/receive"
