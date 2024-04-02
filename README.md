@@ -1,6 +1,6 @@
 # Prometheus kafka demo
 
-In this project, we have created a Prometheus instance and a Kafka system. Raw data from Prometheus is fed into Kafka using the Prometheus Kafka Adapter. This data is then read by a KumuluzEE Java microservice, which also produces four topics that aggregate the collected data. Additionally, we have a Kafka UI for easy management of the Kafka system.
+In this project, we have created a system with three dummy Quarkus microservices, a Prometheus and Kafka instance and KumuluzEE Java aggregation microservice. Prometheus is collecting data from microservices and feds it into Kafka using the Prometheus Kafka Adapter. This data is then read by a KumuluzEE Java microservice, which also produces four topics that aggregate the collected data. Additionally, we have a Kafka UI for easy management of the Kafka system.
 
 We have created 5 Kafka topics - one with raw data and 4 with aggregated data.
 
@@ -11,8 +11,13 @@ This is how the stream of metrci_values_WMA looks like:
 ![image](https://github.com/AnejVovcak/prometheus-kafka-demo/assets/79155108/56ca405f-8801-422c-bbaf-4a44f795d206)
 
 
+## Components
 
-## Services
+- **Dummy Service 1**: A dummy Quarkus service that produces random metrics. It's accessible on port 8082.
+
+- **Dummy Service 2**: A dummy Quarkus service that produces random metrics. It's accessible on port 8083.
+
+- **Dummy Service 3**: A dummy Quarkus service that produces random metrics. It's accessible on port 8084.
 
 - **Prometheus**: Monitoring and alerting toolkit. It's configured with a custom configuration file and accessible on port 9090.
 
@@ -26,37 +31,56 @@ This is how the stream of metrci_values_WMA looks like:
 
 - **Aggregation Demo**: A demo service that produces and consumes from the Kafka broker. It's accessible on port 8080.
 
-## Getting Started
 
-To start the project, ensure you have Docker and Docker Compose installed, then run:
+## Prerequisites
 
-```bash
-# first build te aggregaton-demo image
-cd aggregation-demo
-mvn clean package
-docker build -t aggregation-demo .
-cd ..
-```
+- [docker](https://docs.docker.com/get-docker/)
+- [minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-```bash
-# run docker-compose (make sure your 8080 and 8081 ports are free)
+## Development
+
+## Running the application in dev mode
+
+You can deploy an entire application using docker-compose. All the docker images are already built and pushed to the docker hub.
+
+```shell script
 docker-compose up -d
-```
 
-This will pull the necessary images and start the services.
-
-## Accessing the Services
-
-- Prometheus: [http://localhost:9090](http://localhost:9090)
-- Kafka UI: [http://localhost:8081](http://localhost:8081)
-- Aggregation Demo: [http://localhost:8080](http://localhost:8080)
-
-## Stopping the Services
-
-To stop the services, run:
-
-```bash
+# stop the services
 docker-compose down
 ```
 
-This will stop and remove the containers.
+## Running the application in minikube
+
+You can deploy the application to minikube using the following commands:
+
+```shell script
+minikube delete --all
+
+minikube start
+
+#create namespace ul
+kubectl create namespace ul
+
+# move the namespace to ul
+kubectl config set-context --current --namespace=ul
+
+# deploy the kafka and zookeeper
+kubectl create -f "https://strimzi.io/install/latest?namespace=ul" -n ul
+kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n ul
+
+# wait for the kafka to be ready
+kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n ul
+
+# deploy the rest of the services
+kubectl apply -f deployment/k8s -n ul
+
+# wait for the services to be ready
+kubectl wait pod --for=condition=Ready --all --timeout=300s -n ul
+
+# go to kafka-ui web page
+minikube service kafka-ui -n ul
+
+````
+

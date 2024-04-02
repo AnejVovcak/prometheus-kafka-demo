@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-ui
-  namespace: prometheus-demo
 spec:
   replicas: 1  # You can adjust the number of replicas as per your requirement
   selector:
