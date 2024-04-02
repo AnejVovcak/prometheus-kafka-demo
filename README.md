@@ -1,6 +1,6 @@
 # Prometheus kafka demo
 
-In this project, we have created a system with three dummy Quarkus microservices, a Prometheus and Kafka instance and KumuluzEE Java aggregation microservice. Prometheus is collecting data from microservices and feds it into Kafka using the Prometheus Kafka Adapter. This data is then read by a KumuluzEE Java microservice, which also produces four topics that aggregate the collected data. Additionally, we have a Kafka UI for easy management of the Kafka system.
+In this project, we have created a system with three Quarkus microservices, a Prometheus and Kafka instance and KumuluzEE Java aggregation microservice. Prometheus is collecting data from microservices and feds it into Kafka using the Prometheus Kafka Adapter. This data is then read by a KumuluzEE Java microservice, which also produces four topics that aggregate the collected data. Additionally, we have a Kafka UI for easy management of the Kafka system.
 
 We have created 5 Kafka topics - one with raw data and 4 with aggregated data.
 
@@ -13,24 +13,23 @@ This is how the stream of metrci_values_WMA looks like:
 
 ## Components
 
-- **Dummy Service 1**: A dummy Quarkus service that produces random metrics. It's accessible on port 8082.
+- **Asset demo 1**: A dummy Quarkus service that produces random metrics. It's accessible on port 8082. It represents 'ACES asset'.
 
-- **Dummy Service 2**: A dummy Quarkus service that produces random metrics. It's accessible on port 8083.
+- **Asset demo 2**: A dummy Quarkus service that produces random metrics. It's accessible on port 8083. It represents 'ACES asset'.
 
-- **Dummy Service 3**: A dummy Quarkus service that produces random metrics. It's accessible on port 8084.
+- **Asset demo 3**: A dummy Quarkus service that produces random metrics. It's accessible on port 8084. It represents 'ACES asset'.
 
-- **Prometheus**: Monitoring and alerting toolkit. It's configured with a custom configuration file and accessible on port 9090.
+- **Prometheus**: Monitoring and alerting toolkit. It's configured with a custom configuration file and accessible on port 9090. It's set up to scrape metrics from the dummy services. It represents 'Monitoring system'.
 
 - **Kafka**: A distributed streaming platform. It's set up with a Zookeeper instance and accessible on port 9092.
 
-- **Zookeeper**: A centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
-
-- **Prometheus Kafka Adapter**: An adapter to push Prometheus metrics to Kafka. It's configured to connect to the Kafka broker and push data to the `prometheus_raw_data` topic.
+- **Prometheus Kafka Adapter**: An adapter to push Prometheus metrics to Kafka. It's configured to connect to the Kafka broker and push data to the `prometheus_raw_data` topic. It represents 'Forwarder'.
 
 - **Kafka UI**: A user interface for Kafka for easy management. It's configured to connect to the Kafka broker and Zookeeper instance and accessible on port 8081.
 
-- **Aggregation Demo**: A demo service that produces and consumes from the Kafka broker. It's accessible on port 8080.
+- **Aggregation Demo**: A demo service that produces and consumes from the Kafka broker. It's accessible on port 8080. It represents 'Event store and stream processing'.
 
+![image.png](..%2Fimage.png)
 
 ## Prerequisites
 
