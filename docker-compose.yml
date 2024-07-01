@@ -29,7 +29,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
       - "9090:9090"
-      
+
   kafka:
     image: confluentinc/cp-kafka:latest
     environment:
@@ -58,7 +58,7 @@ services:
       PORT: 8081
     depends_on:
       - kafka
-    
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     environment:
@@ -80,3 +80,14 @@ services:
       - "8080:8080"
     depends_on:
       - kafka
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./deployment/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
